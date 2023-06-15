@@ -14,5 +14,13 @@ export default defineNuxtConfig({
             FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
             GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         }
-    }
+    },
+    vite: {
+        server: {
+            fs: {
+              // Allow serving files from one level up to the project root
+              allow: ['/Users/lenny.lin'],
+            },
+          }
+    },
 })

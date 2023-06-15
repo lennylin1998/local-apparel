@@ -4,11 +4,33 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 // import FacebookProvider from 'next-auth/providers/facebook'
 import GoogleProvider from 'next-auth/providers/google'
 import { NuxtAuthHandler } from '#auth'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { PrismaClient } from '@prisma/client'
 
+async function getUser(session: any) {
+  return await $fetch('/api/user', {
+    method: 'POST',
+    body: {
+        email: session?.user?.email,
+        username: session?.user?.username
+    }
+  })
+}
+
+const prisma = new PrismaClient()
 const runtimeConfig = useRuntimeConfig()
 export default NuxtAuthHandler({
   // A secret string you define, to ensure correct encryption
   secret: runtimeConfig.ENCRYPT_SECRET,
+  callbacks: {
+      session: async ({session, token}) => {
+        const user = await getUser(session);
+        (session as any).role = user?.role;
+        (session as any).name = user?.name
+        return Promise.resolve(session)
+      }
+  },
+  adapter: PrismaAdapter(prisma),
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     GithubProvider.default({

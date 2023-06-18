@@ -1,9 +1,5 @@
 <template>
-  <Navbar />
-  <pre>{{ data }}</pre>
+  <div class="text-gray-900 justify-center">
+    <p>THIS IS CONTENT</p>
+  </div>
 </template>
-  
-<script lang="ts" setup>
-  const { data } = useAuth()
-</script>
-  

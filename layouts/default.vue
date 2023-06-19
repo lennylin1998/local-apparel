@@ -3,29 +3,35 @@
         <nav class="w-screen">
             <div class="relative flex h-16 items-center justify-between p-4">
                 <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                    <Button @click="visible = !visible" icon="pi pi-bars" text />
+                    <Button @click="visible = !visible" icon="pi pi-bars" text severity="secondary" />
                 </div>
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <span class="font-extrabold text-gray-800 text-2xl">LOCAL APPAREL</span>
                 </div>
                 <div class="hidden sm:block flex items-center sm:justify-end text-gray">
-                    <Button v-if="loggedIn" @click="handleLogOut" icon="pi pi-sign-out" text />
-                    <Button v-else @click="handleLogIn" icon="pi pi-sign-in" text />
+                    <Button v-if="loggedIn" @click="handleLogOut" icon="pi pi-sign-out" text severity="secondary" />
+                    <Button v-else @click="handleLogIn" icon="pi pi-sign-in" text severity="secondary" />
                 </div>
             </div>
         </nav>
         <div class="card flex justify-content-center sm:hidden">
             <Sidebar v-model:visible="visible" :showCloseIcon="closeIcon" :pt="passThrough" class="sm:flex-shrink-0">
+                <template #header>
+                    <div class="flex">
+                        <Button v-if="loggedIn" @click="handleLogOut" rounded icon="pi pi-sign-out" text severity="secondary" />
+                        <Button v-else @click="handleLogIn" rounded icon="pi pi-sign-in" text severity="secondary" />
+                    </div>
+                </template>
                 <div>
                     <PanelMenu :model="itemsPanel" />
                 </div>
             </Sidebar>
         </div>
         <div class="flex">
-            <div class="h-screen w-[220px] hidden sm:block pt-1">
+            <div class="h-screen w-[220px] hidden sm:block pt-1 flex-shrink-0">
                 <PanelMenu :model="itemsPanel" />
             </div>
-            <div>
+            <div class="w-screen">
                 <slot />
             </div>
         </div>
@@ -53,8 +59,8 @@
 
     const itemsPanel = ref([
         {
-            label: 'Explore',
-            to: '/admin',
+            label: 'Home',
+            to: '/',
             icon: 'pi pi-home',
         },
         {
@@ -69,7 +75,7 @@
         {
             label: 'Saved List',
             to: '/saved',
-            icon: 'pi pi-home',
+            icon: 'pi pi-heart',
         },
     ]);
 
@@ -85,4 +91,11 @@
     )
     })
     itemsPanel.value[1].items = brandItem
+    if (data.value.role == 'ADMIN') {
+        itemsPanel.value.push({
+            label: 'Admin',
+            to: '/admin',
+            icon: 'pi pi-cog',
+        })
+    }
 </script>

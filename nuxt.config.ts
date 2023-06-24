@@ -15,6 +15,9 @@ export default defineNuxtConfig({
             GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         }
     },
+    alias: {
+        assests: "/<rootDir>/assets"
+    },
     css: [
         "primevue/resources/themes/lara-light-blue/theme.css",
         "primevue/resources/primevue.css",
@@ -26,9 +29,23 @@ export default defineNuxtConfig({
     vite: {
         server: {
             fs: {
-              // Allow serving files from one level up to the project root
-              allow: ['/Users/lenny.lin'],
+                // Allow serving files from one level up to the project root
+                allow: ['/Users/lenny.lin'],
             },
           }
     },
+    nitro: {
+        storage: {
+            'redis': {
+                driver: 'redis',
+                /* redis connector options */
+                port: 6379, // Redis port
+                host: "127.0.0.1", // Redis host
+                username: "", // needs Redis >= 6
+                password: "",
+                db: 0, // Defaults to 0
+                tls: {} // tls/ssl
+            }
+        }
+      }
 })

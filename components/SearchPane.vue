@@ -1,61 +1,82 @@
 
 <template>
     <div class="card">
-        <Toolbar>
+        <Toolbar :pt="passThroughToolbar">
             <template #start>
-                <!-- <Button @click="filter.price--" label="New" icon="pi pi-plus" class="mr-2" />
-                <Button label="Upload" icon="pi pi-upload" severity="success" />
-                <i class="pi pi-bars p-toolbar-separator mr-2" />
-                <SplitButton label="Save" icon="pi pi-check" :model="items" severity="warning"></SplitButton> -->
-                <div class="card flex justify-content-center">
-                    <Dropdown @change="filter.brand = selectedCity.name" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="w-full md:w-14rem" />
+                <div class="card flex justify-content-center w-full">
+                    <Dropdown @change="updateAudience" v-model="selectedAudience" :options="audiences" showClear optionLabel="audience" placeholder="Audience" class="w-full" />
+                </div>
+                <div class="card flex justify-content-center w-full">
+                    <MultiSelect @change="updateCategory" v-model="selectedCategories" :options="categories" optionLabel="category" placeholder="Categories" :showToggleAll="false" class="w-full" />
+                </div>
+                <div class="flex justify-center">
+                    <Button @click="clickClearFilter" icon="pi pi-filter-slash" text severity="secondary" class="p-2"/>
+                    <Button @click="clickSortProduct" :icon="sortIcon" text severity="secondary" class="p-2"/>
                 </div>
             </template>
-
             <template #end>
-                <Button icon="pi pi-search" class="mr-2" />
-                <Button icon="pi pi-calendar" severity="success" class="mr-2" />
-                <Button icon="pi pi-times" severity="danger" />
             </template>
         </Toolbar>
+        <PriceSlider ref="priceSliderRef" :filter="filter" class="card justify-content-center p-4" />
     </div>
 </template>
 
 <script lang="ts" setup>
-    const items = ref([
-        {
-            label: 'Update',
-            icon: 'pi pi-refresh'
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-times'
-        },
-        {
-            label: 'Vue Website',
-            icon: 'pi pi-external-link',
-            command: () => {
-                window.location.href = 'https://vuejs.org/';
-            }
-        },
-        {
-            label: 'Upload',
-            icon: 'pi pi-upload',
-            command: () => {
-                this.$router.push('fileupload');
-            }
-        }
-    ])
-    const selectedCity = ref();
-    const cities = ref([
-        { name: 'New York', code: 'NY' },
-        { name: 'Rome', code: 'RM' },
-        { name: 'London', code: 'LDN' },
-    ]);
+    const props = defineProps(['sortIcon'])
+    const emit = defineEmits(['sortProduct'])
+    const { filter, updateFilter } = inject('filter')
 
-    // const emit = defineEmits(['updateFilter'])
-    const props = defineProps(['filter'])
-    // function changeFilter() {
-    //     emit('updateFilter', filter.price)
-    // }
+    const selectedAudience = filter.value.audience ? ref({ audience: filter.value.audience }) : ref(null)
+    const audienceData = await useFetch('/api/audience')
+    const audiences = computed(() => {
+        const _ = new Array()
+        audienceData.data.value.forEach((element) => {
+            _.push({
+                audience: element
+            })
+        })
+        return _
+    })
+    const updateAudience = () => {
+        updateFilter('audience', selectedAudience.value?.audience ?? '')
+    }
+
+    const selectedCategories = ref([])
+    filter.value.category.forEach((element) => {
+        selectedCategories.value.push({ category: element })
+    })
+
+    const categoryData = await useFetch('/api/category')
+    const categories = computed(() => {
+        const _ = new Array()
+        categoryData.data.value.forEach((element) => {
+            _.push({
+                category: element
+            })
+        })
+        return _
+    })
+
+    const updateCategory = () => {
+        const selectedCategoryArray = selectedCategories.value.map(item => item.category)
+        updateFilter('category', selectedCategoryArray)
+    }
+
+    const priceSliderRef = ref(null)
+    const clickClearFilter = () => {
+        selectedAudience.value = null
+        updateFilter('audience', '')
+        selectedCategories.value = []
+        updateFilter('category', [])
+        priceSliderRef.value.clearPriceFilter()
+        // emit('handleClearFilter')
+    }
+
+    const clickSortProduct = () => {
+        emit('handleSortProduct')
+    }
+
+    const passThroughToolbar = {
+        start: { class: 'justify-between w-full spcace-x-2' },
+    }
 </script>

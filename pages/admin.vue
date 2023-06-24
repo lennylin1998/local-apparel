@@ -5,5 +5,4 @@
 <script lang="ts" setup>
     definePageMeta({ middleware: 'admin' })
     const { status, data } = await useAuth()
-
 </script>

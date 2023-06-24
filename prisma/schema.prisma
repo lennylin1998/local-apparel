@@ -40,7 +40,7 @@ model Session {
 model User {
   id             String    @id @default(cuid())
   name           String?
-  email          String?   @unique
+  email          String    @unique
   emailVerified  DateTime?
   image          String?
   role           Role      @default(USER)
@@ -63,27 +63,29 @@ enum Role {
 }
 
 model LikedProduct {
-  id         Int      @id
-  userid     String
+  user_id     String
   product_id String
-  user       User     @relation(fields: [userid], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
   product    Product  @relation(fields: [product_id], references: [id])
+  @@id([user_id, product_id])
 }
 
 model Product {
-  id            String         @id
-  name          String
-  brandId       Int?
-  category      Category
-  audience      Audience
-  price         Int
-  color         String
-  priority      Int            @default(0)
-  likes         Int            @default(0)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  likedProducts LikedProduct[]
-  brand         Brand?         @relation(fields: [brandId], references: [id])
+  id               String         @id
+  name             String
+  brandId          Int?
+  category         Category
+  audience         Audience
+  price            Int
+  color            String
+  priority         Int            @default(0)
+  likes            Int            @default(0)
+  shortDescription String?        @db.Text
+  description      String?        @db.Text
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  likedProducts    LikedProduct[]
+  brand            Brand?         @relation(fields: [brandId], references: [id])
 }
 
 enum Category {

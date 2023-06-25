@@ -42,7 +42,8 @@
     }
 
     const selectedCategories = ref([])
-    filter.value.category.forEach((element) => {
+    
+    filter.value.category?.forEach((element) => {
         selectedCategories.value.push({ category: element })
     })
 

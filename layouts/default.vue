@@ -15,7 +15,7 @@
                         <Button @click="visible = !visible" icon="pi pi-bars" text severity="secondary" />
                     </div>
                     <div class="flex flex-1 items-center justify-center md:hidden">
-                        <span class="text-center font-extrabold text-gray-800 text-2xl">LOCAL APPAREL</span>
+                        <span class="text-center font-extrabold text-gray-800 text-4xl">LOCAL APPAREL</span>
                     </div>
                     <div class="hidden md:block absolute inset-y-0 right-5 items-center justify-center">
                         <div class="flex flex-1 items-center justify-end h-full">
@@ -66,6 +66,9 @@
 
     // Sidebar- Config when size smaller than sm
     const visible = ref(false)   // togglable
+    const closeSidebar = () => {
+        visible.value = false
+    }
     const passThroughSidebar = {
         content: { class: "space-y-4" },
     }
@@ -75,20 +78,32 @@
             label: 'Home',
             to: '/',
             icon: 'pi pi-home',
+            command: () => {
+                closeSidebar()
+            }
         },
         {
             label: 'Brands',
             icon: 'pi pi-fw pi-th-large',
+            command: () => {
+                closeSidebar()
+            }
         },
         {
             label: 'Account',
             to: '/account',
             icon: 'pi pi-fw pi-user',
+            command: () => {
+                closeSidebar()
+            }
         },
         {
             label: 'Saved List',
             to: '/saved',
             icon: 'pi pi-heart',
+            command: () => {
+                closeSidebar()
+            }
         },
     ]);
 
@@ -107,8 +122,11 @@
     if (data.value?.role == 'ADMIN') {
         itemsPanel.value.push({
             label: 'Admin',
-            to: '/admin',
+            to: '/admin/',
             icon: 'pi pi-cog',
+            command: () => {
+                closeSidebar()
+            }
         })
     }
 </script>

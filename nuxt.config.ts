@@ -21,7 +21,8 @@ export default defineNuxtConfig({
     css: [
         "primevue/resources/themes/lara-light-blue/theme.css",
         "primevue/resources/primevue.css",
-        "primeicons/primeicons.css"
+        "primeicons/primeicons.css",
+        '@fortawesome/fontawesome-svg-core/styles.css'
     ],
 	build: {
 		transpile: ["primevue"]
@@ -47,5 +48,5 @@ export default defineNuxtConfig({
                 tls: {} // tls/ssl
             }
         }
-      }
+    },
 })

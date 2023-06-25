@@ -8,7 +8,11 @@ export default defineEventHandler(async (event) => {
             user_id: userID
         },
         include: {
-            product: true
+            product: {
+                include: {
+                    brand: true
+                }
+            }
         }
     })
     return userLikedProducts ?? []

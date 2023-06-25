@@ -49,7 +49,7 @@
         filter.value[filterKey] = updatedValue
     }
 
-    if (previousFilterData.value !== null) {
+    if (previousFilterData.value) {
         filter.value = previousFilterData.value
     }
     provide('filter', { filter,  updateFilter })

@@ -1,9 +1,9 @@
 <template>
-    <div @click="directProductDetail" class="card flex align-items-center justify-content-center">
+    <div class="card flex align-items-center justify-content-center">
         <Card :pt="passTroughCard">
             <template #header>
                 <div class="relative overflow-hidden">
-                    <img :src="`_nuxt/assets/${productInfo.id}.jpg`" class="h-72 w-full object-cover transition duration-300 ease-in-out hover:scale-110" />
+                    <img @click="directProductDetail" :src="`_nuxt/assets/${productInfo.id}.jpg`" class="h-72 w-full object-cover transition duration-300 ease-in-out hover:scale-110" />
                     <!-- <div class="absolute right-0 bottom-0 w-[100px] h-[100px]">
                         <div class="w-full h-full">
                             <Button icon="pi pi-heart" severity="danger" text rounded aria-label="Favorite" :pt="passThroughBuitton" />
@@ -24,7 +24,7 @@
             <template #subtitle> {{ brandData.data.value[productInfo.brandId]?.name }} </template>
             <template #content>
                 <p>
-                    NTD {{ productInfo.price }}
+                    NTD {{ productInfo.price.toLocaleString() }}
                     <!-- {{ productInfo }} -->
                 </p>
             </template>
@@ -58,6 +58,6 @@
         })
     }
     const directProductDetail = async () => {
-        await navigateTo('/product/' + props.productInfo.id)
+        await navigateTo('/products/' + props.productInfo.id)
     }
 </script>

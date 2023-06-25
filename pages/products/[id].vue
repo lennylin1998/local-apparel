@@ -23,7 +23,7 @@
                         <ShareNetwork
                             v-for="(network) in socialSharingNetworks"
                             :network="network.network"
-                            :url="`https://localhost/${route.fullPath}`"
+                            url="https://primevue.org/"
                             title="Checkout the product I just found on LOCAL APPEREL!"
                             description="This is some beautiful peice of work!"
                             hashtags="localapparel"

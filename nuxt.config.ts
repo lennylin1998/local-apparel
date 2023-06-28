@@ -37,16 +37,7 @@ export default defineNuxtConfig({
     },
     nitro: {
         storage: {
-            'redis': {
-                driver: 'redis',
-                /* redis connector options */
-                port: 40528, // Redis port
-                host: "immortal-imp-40528.kv.vercel-storage.com", // Redis host
-                username: "default", // needs Redis >= 6
-                password: "19e1499995a5432dadb64c780b7e7546",
-                db: 0, // Defaults to 0
-                tls: {} // tls/ssl
-            }
+            data: { driver: 'vercelKV' }
         }
     },
     secret: "my-secret"

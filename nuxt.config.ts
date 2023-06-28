@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         server: {
             fs: {
                 // Allow serving files from one level up to the project root
-                allow: ['/Users/lenny.lin'],
+                allow: ['../'],
             },
           }
     },
@@ -40,10 +40,10 @@ export default defineNuxtConfig({
             'redis': {
                 driver: 'redis',
                 /* redis connector options */
-                port: 6379, // Redis port
-                host: "127.0.0.1", // Redis host
-                username: "", // needs Redis >= 6
-                password: "",
+                port: 40528, // Redis port
+                host: "immortal-imp-40528.kv.vercel-storage.com", // Redis host
+                username: "default", // needs Redis >= 6
+                password: "19e1499995a5432dadb64c780b7e7546",
                 db: 0, // Defaults to 0
                 tls: {} // tls/ssl
             }

@@ -49,4 +49,7 @@ export default defineNuxtConfig({
             }
         }
     },
+    auth: {
+        origin: "https://local-apparel.vercel.app/"
+    }
 })

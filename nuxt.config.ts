@@ -49,5 +49,5 @@ export default defineNuxtConfig({
             }
         }
     },
-    secret: process.env.ENCRYPT_SECRET
+    secret: "my-secret"
 })

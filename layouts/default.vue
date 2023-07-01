@@ -19,7 +19,7 @@
                     </div>
                     <div class="hidden md:block absolute inset-y-0 right-5 items-center justify-center">
                         <div class="flex flex-1 items-center justify-end h-full">
-                            <p v-if="loggedIn" class="font-bold px-2">Welcome, {{ data?.name }} !</p>
+                            <p v-if="loggedIn" class="font-bold px-2">Welcome, {{ data?.name ?? 'Guest' }} !</p>
                             <Button v-if="loggedIn" @click="handleLogOut" icon="pi pi-sign-out" text severity="secondary" />
                             <Button v-else @click="handleLogIn" icon="pi pi-sign-in" text severity="secondary" />
                         </div>
@@ -36,7 +36,7 @@
                 <template #header>
                     <div class="flex items-center">
                         <div class="text-center">
-                            <p class="font-bold">Welcome, {{ data.name }} !</p>
+                            <p class="font-bold">Welcome, {{ data?.name ?? 'Guest' }} !</p>
                         </div>
                         <Button v-if="loggedIn" @click="handleLogOut" rounded icon="pi pi-sign-out" text severity="secondary" />
                         <Button v-else @click="handleLogIn" rounded icon="pi pi-sign-in" text severity="secondary" />
@@ -85,9 +85,6 @@
         {
             label: 'Brands',
             icon: 'pi pi-fw pi-th-large',
-            command: () => {
-                closeSidebar()
-            }
         },
         {
             label: 'Account',
@@ -113,8 +110,11 @@
     brandData.data._rawValue.map((brand) => {
     brandItem.push(
         {
-        label: brand.name,
-        to: '/brand/' + brand.name
+            label: brand.name,
+            to: '/brand/' + brand.name,
+            command: () => {
+                closeSidebar()
+            }
         }
     )
     })

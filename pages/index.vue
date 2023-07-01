@@ -28,6 +28,7 @@
 </template>
 <script lang="ts" setup>
     const { signIn } = useAuth()
+    const route = useRoute()
     async function handleLogIn() {
         showDialog.value = false
         await signIn()
@@ -51,6 +52,17 @@
 
     if (previousFilterData.value) {
         filter.value = previousFilterData.value
+    }
+
+    const redirectFromBrand = route.query.brand;
+    if (redirectFromBrand) {
+        filter.value = {
+            priceBottom: 0,
+            priceCap: 100,
+            brand: parseInt(redirectFromBrand),
+            category: [],
+            audience: '',
+        }
     }
     provide('filter', { filter,  updateFilter })
     // provide variables that price filter needs
@@ -79,15 +91,6 @@
             sort.value = null
         }
     }
-    // const clearFilter = () => {
-    //     filter.value = {
-    //         priceBottom: 0,
-    //         priceCap: 100,
-    //         brand: filter.value.brand,
-    //         category: [],
-    //         audience: '',
-    //     }
-    // }
 
     const showProduct = (productInfo) => {
         if ((productInfo.price < actualPriceBottom.value) || (productInfo.price > actualPriceCap.value)) {

@@ -3,7 +3,7 @@
         <Card :pt="passTroughCard">
             <template #header>
                 <div class="relative overflow-hidden">
-                    <img @click="directProductDetail" :src="`_nuxt/assets/${productInfo.id}.jpg`" class="h-72 w-full object-cover transition duration-300 ease-in-out hover:scale-110" />
+                    <img @click="directProductDetail" :src="`images/${productInfo.id}.jpg`" class="h-72 w-full object-cover transition duration-300 ease-in-out hover:scale-110" />
                     <!-- <div class="absolute right-0 bottom-0 w-[100px] h-[100px]">
                         <div class="w-full h-full">
                             <Button icon="pi pi-heart" severity="danger" text rounded aria-label="Favorite" :pt="passThroughBuitton" />

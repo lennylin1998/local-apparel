@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,22 +10,22 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
 }
 
 model Session {
@@ -37,18 +34,20 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String    @unique
-  emailVerified  DateTime?
-  image          String?
-  role           Role      @default(USER)
-  accounts       Account[]
-  sessions       Session[]
-  likedProducts  LikedProduct[]
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role           @default(USER)
+  accounts      Account[]
+  likedProducts LikedProduct[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -59,17 +58,14 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
 model LikedProduct {
-  user_id     String
   product_id String
-  user       User     @relation(fields: [user_id], references: [id])
-  product    Product  @relation(fields: [product_id], references: [id])
+  user_id    String
+  product    Product @relation(fields: [product_id], references: [id])
+  user       User    @relation(fields: [user_id], references: [id])
+
   @@id([user_id, product_id])
+  @@index([product_id], map: "LikedProduct_product_id_fkey")
 }
 
 model Product {
@@ -79,15 +75,29 @@ model Product {
   category         Category
   audience         Audience
   price            Int
-  color            String
+  color            String?
   priority         Int            @default(0)
   likes            Int            @default(0)
-  shortDescription String?        @db.Text
-  description      String?        @db.Text
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+  description      String?        @db.Text
+  shortDescription String?        @db.Text
   likedProducts    LikedProduct[]
   brand            Brand?         @relation(fields: [brandId], references: [id])
+
+  @@index([brandId], map: "Product_brandId_fkey")
+}
+
+model Brand {
+  id               Int       @id @default(autoincrement())
+  name             String    @unique
+  description      String?   @db.Text
+  products Product[]
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 enum Category {
@@ -101,10 +111,3 @@ enum Audience {
   WOMEN
   KIDS
 }
-
-model Brand {
-  id        Int       @id @default(autoincrement())
-  name      String
-  products  Product[]
-}
-
